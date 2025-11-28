@@ -73,9 +73,8 @@ class SwidgetPlugSwitch(CoordinatedSwidgetEntity, SwitchEntity):
         """Initialize the switch."""
         super().__init__(device, coordinator)
         self._attr_name = "Controlled Outlet"
-        # self.entity_id = f"{self.device}_controlled_outlet"
         self._attr_unique_id = (
-            f"{self.device}_controlled_outlet"
+            f"{self.device.mac_address}_controlled_outlet"
         )
 
     @async_refresh_after
@@ -98,7 +97,7 @@ class SwidgetPlugSwitch(CoordinatedSwidgetEntity, SwitchEntity):
 
 
 class SwidgetUSBSwitch(CoordinatedSwidgetEntity, SwitchEntity):
-    """Representation of a swidget USB witch."""
+    """Representation of a swidget USB switch."""
 
     def __init__(
         self,
@@ -109,7 +108,7 @@ class SwidgetUSBSwitch(CoordinatedSwidgetEntity, SwitchEntity):
         super().__init__(device, coordinator)
         self._attr_name = "USB Outlet"
         self._attr_unique_id = (
-            f"{self.device}_usb_outlet"
+            f"{self.device.mac_address}_usb_outlet"
         )
 
     @async_refresh_after

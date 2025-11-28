@@ -10,8 +10,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .const import DOMAIN
 from .coordinator import SwidgetDataUpdateCoordinator
 from .entity import CoordinatedSwidgetEntity
-
-from swidgetclient.device import SwidgetDevice
+from .swidgetclient.device import SwidgetDevice
 
 
 async def async_setup_entry(
@@ -38,10 +37,11 @@ class SwidgetCameraEntity(CoordinatedSwidgetEntity, Camera):
         device: SwidgetDevice,
         coordinator: SwidgetDataUpdateCoordinator,
     ) -> None:
-        """Initialize the switch."""
+        """Initialize the camera."""
         super().__init__(device, coordinator)
         Camera.__init__(self)
         self._extra_arguments: str = "-pred 1"
+        self._attr_unique_id = f"{self.device.mac_address}_camera"
 
     @property
     def use_stream_for_stills(self) -> bool:

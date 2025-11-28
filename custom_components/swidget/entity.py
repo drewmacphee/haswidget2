@@ -31,16 +31,17 @@ def async_refresh_after(
 
 
 class CoordinatedSwidgetEntity(CoordinatorEntity[SwidgetDataUpdateCoordinator]):
-    """Common base class for all coordinated tplink entities."""
+    """Common base class for all coordinated Swidget entities."""
+
+    _attr_has_entity_name = True
 
     def __init__(
         self, device: SwidgetDevice, coordinator: SwidgetDataUpdateCoordinator
     ) -> None:
-        """Initialize the switch."""
+        """Initialize the entity."""
         super().__init__(coordinator)
         self.device: SwidgetDevice = device
-        self._attr_name = self.device.mac_address.replace(":", "").upper()
-        self._attr_unique_id = self.device.id
+        self._attr_unique_id = self.device.mac_address
 
     @property
     def device_info(self) -> DeviceInfo:

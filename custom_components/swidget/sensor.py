@@ -174,11 +174,11 @@ class SwidgetSensor(CoordinatedSwidgetEntity, SensorEntity):
         coordinator: SwidgetDataUpdateCoordinator,
         description: SwidgetSensorEntityDescription,
     ) -> None:
-        """Initialize the switch."""
+        """Initialize the sensor."""
         super().__init__(device, coordinator)
         self.entity_description = description
         self._attr_unique_id = (
-            f"{self.device}_{self.entity_description.key}"
+            f"{self.device.mac_address}_{self.entity_description.key}"
         )
 
     @property
