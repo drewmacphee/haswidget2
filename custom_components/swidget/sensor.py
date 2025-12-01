@@ -46,7 +46,7 @@ class SwidgetSensorEntityDescription(SensorEntityDescription):
 
 SWIDGET_SENSORS: tuple[SwidgetSensorEntityDescription, ...] = (
     SwidgetSensorEntityDescription(
-        key="Power 0",
+        key="power_0",
         native_unit_of_measurement=UnitOfPower.WATT,
         device_class=SensorDeviceClass.POWER,
         state_class=SensorStateClass.MEASUREMENT,
@@ -55,7 +55,7 @@ SWIDGET_SENSORS: tuple[SwidgetSensorEntityDescription, ...] = (
         precision=1,
     ),
     SwidgetSensorEntityDescription(
-        key="Power 1",
+        key="power_1",
         native_unit_of_measurement=UnitOfPower.WATT,
         device_class=SensorDeviceClass.POWER,
         state_class=SensorStateClass.MEASUREMENT,
@@ -64,7 +64,7 @@ SWIDGET_SENSORS: tuple[SwidgetSensorEntityDescription, ...] = (
         precision=1,
     ),
     SwidgetSensorEntityDescription(
-        key="Temperature",
+        key="temperature",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
@@ -73,7 +73,7 @@ SWIDGET_SENSORS: tuple[SwidgetSensorEntityDescription, ...] = (
         precision=1,
     ),
     SwidgetSensorEntityDescription(
-        key="Humidity",
+        key="humidity",
         native_unit_of_measurement=PERCENTAGE,
         device_class=SensorDeviceClass.HUMIDITY,
         state_class=SensorStateClass.MEASUREMENT,
@@ -82,7 +82,7 @@ SWIDGET_SENSORS: tuple[SwidgetSensorEntityDescription, ...] = (
         precision=0,
     ),
     SwidgetSensorEntityDescription(
-        key="Pressure",
+        key="pressure",
         native_unit_of_measurement=UnitOfPressure.HPA,
         device_class=SensorDeviceClass.PRESSURE,
         state_class=SensorStateClass.MEASUREMENT,
@@ -91,7 +91,7 @@ SWIDGET_SENSORS: tuple[SwidgetSensorEntityDescription, ...] = (
         precision=0,
     ),
     SwidgetSensorEntityDescription(
-        key="Air Quality",
+        key="air_quality",
         device_class=SensorDeviceClass.AQI,
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement="AQI",
@@ -100,16 +100,16 @@ SWIDGET_SENSORS: tuple[SwidgetSensorEntityDescription, ...] = (
         precision=0,
     ),
     SwidgetSensorEntityDescription(
-        key="Carbon dioxide",
+        key="co2",
         native_unit_of_measurement=CONCENTRATION_PARTS_PER_MILLION,
         device_class=SensorDeviceClass.CO2,
         state_class=SensorStateClass.MEASUREMENT,
-        name="Carbon dioxide",
+        name="Carbon Dioxide",
         emeter_attr="eco2",
         precision=1,
     ),
     SwidgetSensorEntityDescription(
-        key="Volatile Organic Compounds",
+        key="voc",
         native_unit_of_measurement=CONCENTRATION_PARTS_PER_MILLION,
         device_class=SensorDeviceClass.VOLATILE_ORGANIC_COMPOUNDS,
         state_class=SensorStateClass.MEASUREMENT,
@@ -118,7 +118,7 @@ SWIDGET_SENSORS: tuple[SwidgetSensorEntityDescription, ...] = (
         precision=1,
     ),
     SwidgetSensorEntityDescription(
-        key="Signal Strength",
+        key="signal_strength",
         device_class=SensorDeviceClass.SIGNAL_STRENGTH,
         native_unit_of_measurement=SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
         entity_category = EntityCategory.DIAGNOSTIC,
@@ -177,9 +177,7 @@ class SwidgetSensor(CoordinatedSwidgetEntity, SensorEntity):
         """Initialize the sensor."""
         super().__init__(device, coordinator)
         self.entity_description = description
-        self._attr_unique_id = (
-            f"{self.device.mac_address}_{self.entity_description.key}"
-        )
+        self._attr_unique_id = f"{self._device_mac}_{self.entity_description.key}"
 
     @property
     def name(self) -> str:

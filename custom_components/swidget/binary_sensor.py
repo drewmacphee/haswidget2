@@ -44,7 +44,7 @@ class SwidgetBinarySensorEntityDescription(SensorEntityDescription):
 
 SWIDGET_SENSORS: tuple[SwidgetBinarySensorEntityDescription, ...] = (
     SwidgetBinarySensorEntityDescription(
-        key="Motion",
+        key="motion",
         device_class=BinarySensorDeviceClass.MOTION,
         name="Motion",
         emeter_attr="occupied",
@@ -101,9 +101,7 @@ class SwidgetBinarySensor(CoordinatedSwidgetEntity, SensorEntity):
         """Initialize the binary sensor."""
         super().__init__(device, coordinator)
         self.entity_description = description
-        self._attr_unique_id = (
-            f"{self.device.mac_address}_{self.entity_description.key}"
-        )
+        self._attr_unique_id = f"{self._device_mac}_{self.entity_description.key}"
 
     @property
     def name(self) -> str:

@@ -46,13 +46,13 @@ class SwidgetIdentifyButton(CoordinatedSwidgetEntity, ButtonEntity):
         """Initialize the button entity."""
         super().__init__(device, coordinator)
         self.entity_description = ButtonEntityDescription(
-            key="Blink",
+            key="blink",
             name="Blink",
             icon="mdi:flash",
             entity_category=EntityCategory.CONFIG,
         )
         self._attr_name = "Blink"
-        self._attr_unique_id = f"{self.device.mac_address}_{self.entity_description.key}"
+        self._attr_unique_id = f"{self._device_mac}_blink"
 
     async def async_press(self) -> None:
         """Identify the device by making it blink."""
