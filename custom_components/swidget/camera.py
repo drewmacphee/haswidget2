@@ -41,7 +41,7 @@ class SwidgetCameraEntity(CoordinatedSwidgetEntity, Camera):
         super().__init__(device, coordinator)
         Camera.__init__(self)
         self._extra_arguments: str = "-pred 1"
-        self._attr_unique_id = f"{self.device.mac_address}_camera"
+        self._attr_unique_id = f"{self._device_mac}_camera"
 
     @property
     def use_stream_for_stills(self) -> bool:

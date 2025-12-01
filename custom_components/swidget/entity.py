@@ -1,4 +1,4 @@
-"""Common code for tplink."""
+"""Common code for Swidget."""
 from __future__ import annotations
 
 from collections.abc import Awaitable, Callable, Coroutine
@@ -30,6 +30,21 @@ def async_refresh_after(
     return _async_wrap
 
 
+def format_mac(mac: str) -> str:
+    """Format MAC address to be consistent (lowercase, no separators)."""
+    return mac.replace(":", "").replace("-", "").lower()
+
+
+def short_mac(mac: str) -> str:
+    """Get a short unique identifier from MAC address.
+    
+    Takes the last 6 characters (3 bytes) of the MAC which are unique per device,
+    since the first 6 characters (OUI) are the same for all Swidget devices.
+    """
+    clean_mac = format_mac(mac)
+    return clean_mac[-6:]  # Last 6 hex chars (e.g., "a1b2c3")
+
+
 class CoordinatedSwidgetEntity(CoordinatorEntity[SwidgetDataUpdateCoordinator]):
     """Common base class for all coordinated Swidget entities."""
 
@@ -41,14 +56,15 @@ class CoordinatedSwidgetEntity(CoordinatorEntity[SwidgetDataUpdateCoordinator]):
         """Initialize the entity."""
         super().__init__(coordinator)
         self.device: SwidgetDevice = device
-        self._attr_unique_id = self.device.mac_address
+        self._device_mac = short_mac(self.device.mac_address)
+        self._attr_unique_id = self._device_mac
 
     @property
     def device_info(self) -> DeviceInfo:
         """Return information about the device."""
         return DeviceInfo(
             connections={(dr.CONNECTION_NETWORK_MAC, self.device.mac_address)},
-            identifiers={(DOMAIN, str(self.device.id))},
+            identifiers={(DOMAIN, self._device_mac)},
             manufacturer="Swidget",
             model=self.device.model,
             name=self.device.friendly_name,
