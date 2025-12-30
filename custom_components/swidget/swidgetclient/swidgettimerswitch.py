@@ -11,15 +11,25 @@ class SwidgetTimerSwitch(SwidgetSwitch):
 
     @property
     def is_on(self) -> bool:
-        """Return whether device is on, checking both toggle state and timer duration."""
+        """Return whether device is on, checking toggle state and timer duration."""
         toggle_state = self.assemblies['host'].components["0"].functions['toggle']["state"]
-        try:
-            timer_duration = self.assemblies['host'].components["0"].functions['timer'].get("duration", 0)
-            # Device is on if toggle is on AND timer has a duration > 0
-            return toggle_state == "on" and timer_duration > 0
-        except (KeyError, AttributeError):
-            # Fallback to toggle state if timer info not available
-            return toggle_state == "on"
+        
+        # First check if toggle is on
+        if toggle_state == "on":
+            # If toggle is on, check if timer has expired (duration = 0)
+            try:
+                timer_info = self.assemblies['host'].components["0"].functions.get('timer', {})
+                if isinstance(timer_info, dict):
+                    timer_duration = timer_info.get("duration", None)
+                    # If timer exists and is 0, device is off despite toggle state
+                    if timer_duration is not None and timer_duration == 0:
+                        return False
+                return True
+            except (KeyError, AttributeError):
+                # If we can't check timer, trust the toggle state
+                return True
+        
+        return False
 
     async def set_countdown_timer(self, minutes):
         """Set the countdown timer."""
